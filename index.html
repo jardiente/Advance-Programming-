@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Stick Notes</title>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+
+<h2>Sticky Note App</h2>
+<h1>Stick Notes</h1>
+
+<div id="root"></div>
+
+<script type="text/babel">
+
+class Notes extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            notes: [],
+            newNote: ""
+        };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleAddNote = this.handleAddNote.bind(this);
+        this.handleClearNotes = this.handleClearNotes.bind(this);
+        this.handleShowAllNotes = this.handleShowAllNotes.bind(this);
+    }
+
+    handleInputChange(event) {
+        this.setState({
+            newNote: event.target.value
+        });
+    }
+
+    handleAddNote() {
+        if (this.state.newNote.trim() !== "") {
+
+            const newNote = {
+                text: this.state.newNote,
+                date: new Date().toLocaleString()
+            };
+
+            this.setState({
+                notes: [...this.state.notes, newNote],
+                newNote: ""
+            });
+        }
+    }
+
+    handleClearNotes() {
+        this.setState({
+            notes: []
+        });
+    }
+
+    handleShowAllNotes() {
+        let allNotes = this.state.notes
+            .map(note => note.text)
+            .join("\n");
+
+        alert(allNotes);
+    }
+
+    render() {
+        return (
+            <div>
+
+                <input
+                    type="text"
+                    value={this.state.newNote}
+                    onChange={this.handleInputChange}
+                />
+
+                <button onClick={this.handleAddNote}>
+                    Add note
+                </button>
+
+                <button onClick={this.handleClearNotes}>
+                    Clear notes
+                </button>
+
+                <button onClick={this.handleShowAllNotes}>
+                    Show all notes
+                </button>
+
+                {this.state.notes.map((note, index) => (
+                    <div key={index}>
+                        <p>{note.text}</p>
+                        <p>{note.date}</p>
+                    </div>
+                ))}
+
+            </div>
+        );
+    }
+}
+
+ReactDOM.createRoot(document.getElementById("root"))
+    .render(<Notes />);
+
+</script>
+
+</body>
+</html>
